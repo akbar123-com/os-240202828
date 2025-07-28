@@ -27,6 +27,7 @@ Tugas 1 bertujuan untuk memahami cara kerja system call dalam kernel dan bagaima
 A. Modifikasi file proc.h
 Menambahkan struktur pinfo untuk menyimpan informasi proses:
 
+```c
 #define MAX_PROC 64
 
 struct pinfo {
@@ -34,31 +35,35 @@ struct pinfo {
    int mem[MAX_PROC];
    char name[MAX_PROC][16];
 };
+```
 
 B. Modifikasi file sysproc.c
 Menambahkan deklarasi counter dan include header:
 
+```c
 #include "spinlock.h"
 extern struct {
    struct spinlock lock;
    struct proc proc[NPROC];
 } ptable;
 extern int readcount;  // Counter untuk read 
-
+```
 ---
 
 2. Registrasi System Call Baru
 Modifikasi file syscall.h
 Menambahkan nomor system call baru:
 
+```c
 #define SYS_getpinfo     22
 #define SYS_getreadcount 23
-
+```
 ---
 
 3. Modifikasi file syscall.c
 Mendaftarkan fungsi system call:
 
+```c
 extern int sys_getpinfo(void);
 extern int sys_getreadcount(void);
 
@@ -67,30 +72,33 @@ static int (*syscalls[])(void) = {
     [SYS_getpinfo]      sys_getpinfo,
     [SYS_getreadcount]  sys_getreadcount,
 };
-
+```
 ---
 
 4. Interface User-Level
 A. Modifikasi file user.h
 Menambahkan prototype fungsi:
 
+```c
 struct pinfo; //forward declaration
 int getpinfo(struct pinfo*);
 int getreadcount(void);
-
+```
 
 B. Modifikasi file usys.S
 Menambahkan wrapper assembly:
 
+```c
 SYSCALL(getpinfo)
 SYSCALL(getreadcount)
-
+```
 ---
 
 5. Implementasi Fungsi Kernel
 Modifikasi file sysproc.c
 Mengimplementasikan kedua system call:
 
+```c
 int
 sys_getreadcount(void) {
    return readcount;
@@ -120,7 +128,7 @@ sys_getpinfo(void)
    release(&ptable.lock);
    return 0;
 }
-
+```
 ---
 
 6.  Modifikasi System Call read()
@@ -128,7 +136,7 @@ Modifikasi file sysfile.c
 Menambahkan counter dan increment:
 readcount++;                                      
 
-
+```c
 int
 sys_read(void)
 {
@@ -142,12 +150,13 @@ sys_read(void)
         return -1;
     return fileread(f, p, n);
 }
-
+```
 ---
 
 7. Program Penguji
 A. File ptest.c (untuk menguji getpinfo)
 
+```c
 #include "types.h"
 #include "stat.h"
 #include "user.h"
@@ -168,9 +177,11 @@ int main() {
    }
    exit();
 }
+```
 
 B. File rtest.c (untuk menguji getreadcount)
 
+```c
 #include "types.h"
 #include "stat.h"
 #include "user.h"
@@ -182,15 +193,16 @@ int main() {
    printf(1, "Read Count Setelah: %d\n", getreadcount());
    exit();
 }
-
+```
 C. Modifikasi Makefile
 Menambahkan program uji ke daftar user programs:
 
+```c
 UPROGS=\
     # ... existing programs ...
     _ptest\
     _rtest\
-
+```
 ---
 
 ## ✅ Uji Fungsionalitas
@@ -207,16 +219,19 @@ Berdasarkan screenshot hasil testing, kedua program uji berhasil dijalankan:
 
 $ ptest
 
+```c
 PID     MEM     NAME
 1       12288   init
 2       16384   sh
 3       12288   ptest
+```
 
 $ rtest  
 
+```c
 Read Count Sebelum: 12
 Read Count Setelah: 13
-
+```
 Hasil testing menunjukkan bahwa:
 
 System call getpinfo() berhasil mengambil dan menampilkan informasi proses
