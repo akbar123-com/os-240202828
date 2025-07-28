@@ -24,6 +24,7 @@ Tugas 1 bertujuan untuk memahami cara kerja system call dalam kernel dan bagaima
 
 ## 🛠️ Rincian Implementasi
 1. Penambahan Struktur Data dan Counter
+   
 A. Modifikasi file proc.h
 Menambahkan struktur pinfo untuk menyimpan informasi proses:
 
@@ -76,6 +77,7 @@ static int (*syscalls[])(void) = {
 ---
 
 4. Interface User-Level
+   
 A. Modifikasi file user.h
 Menambahkan prototype fungsi:
 
@@ -154,6 +156,7 @@ sys_read(void)
 ---
 
 7. Program Penguji
+   
 A. File ptest.c (untuk menguji getpinfo)
 
 ```c
