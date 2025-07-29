@@ -239,7 +239,7 @@ main(void)
     exit(); // Keluar jika gagal
 }
 ```
-```
+
 
 ### 6. Update Makefile
 
@@ -252,7 +252,6 @@ UPROGS=\
     _audit\
 ```
 
----
 
 ## ✅ Uji Fungsionalitas
 
