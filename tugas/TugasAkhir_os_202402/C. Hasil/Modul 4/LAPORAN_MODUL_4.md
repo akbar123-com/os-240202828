@@ -366,11 +366,11 @@ $
 - **Bit shifting bermasalah**: `(seed >> 16) & 0x7fff` mungkin tidak memberikan distribusi yang baik untuk byte output
 - **Inisialisasi seed**: Seed selalu dimulai dari nilai yang sama setiap boot sistem
 
-6. Device Registration Array Index
+### 6. Device Registration Array Index
 **Masalah**: Dokumentasi menyarankan [3] = { randomread, 0 } tetapi implementasi menggunakan [0] = { randomread, 0 }
 **Solusi**: Menggunakan index [0] sesuai dengan implementasi yang dibuat, memastikan konsistensi dengan major number di mknod()
 
-7. Include Header Files
+### 7. Include Header Files
 **Masalah**: Dokumentasi menyertakan #include "traps.h" dan urutan include yang berbeda
 **Solusi**: Menghapus #include "traps.h" yang tidak diperlukan dan menyesuaikan urutan include: fs.h setelah param.h
 
